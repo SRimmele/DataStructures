@@ -33,6 +33,10 @@ const char* headings[operations] =
     "| Search    "
 };
 
+HashTable::HashTable()
+{
+    for(int i = 0; i < size; i++)
+}
 
 //  generate(int size, int maxSize_)
 // {
