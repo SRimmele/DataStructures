@@ -69,7 +69,8 @@ bool HashTable::insert(std::string key, int value)
     while(array[i].key.length() != 0) {
         // Fail if duplicate key
         if(array[i].key == key) {
-            return false;
+            array[i].value = value;
+            return true;
         }
 
         i = i + 1 % maxSize;
