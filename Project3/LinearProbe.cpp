@@ -8,7 +8,7 @@
  * Test cases should be completed for:
  * 1. Own Linear Probing
  * 2. Experimenter (1, 10, 19, 28) Hopscotch Hashing
- * 3. Experimenter 1, 10, 19, 28) Hopscotch Hashing
+ * 3. Experimenter (1, 10, 19, 28) Hopscotch Hashing OR STL
  * 
  * # Notes
  * - Do not have to use sample code
@@ -20,6 +20,7 @@
 #include <time.h>
 #include <algorithm>
 #include <iomanip>
+#include <string>
 
 #include "Complexity_Timer.hpp"
 #include "LinearProbe.hpp"
@@ -33,9 +34,21 @@ const char* headings[operations] =
     "| Search    "
 };
 
-HashTable::HashTable()
+HashTable::HashTable(int maxSize_)
 {
-    for(int i = 0; i < size; i++)
+    currentSize = 0; 
+    maxSize = maxSize_; 
+    array = new int[maxSize]; 
+}
+
+HashTable::~HashTable()
+{
+    delete [] array; 
+}
+
+int HashTable::hashFunction(std::string key)
+{
+    key.length() % maxSize; 
 }
 
 //  generate(int size, int maxSize_)
