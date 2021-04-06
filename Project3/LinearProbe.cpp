@@ -136,6 +136,13 @@ int HashTable::search(std::string key)
     throw "Key not in map";
 }
 
+HashTable generateHashMap(int size, int maxSize) {
+    HashTable map(maxSize);
+
+    for(int i = 0; i < size; ++i) {
+        map.insert(std::to_string(i), i);
+    }
+}
 //  generateHash(int size, int maxSize_)
 // {
 //     std::vector<int> values;
