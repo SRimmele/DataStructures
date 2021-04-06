@@ -51,18 +51,18 @@ int HashTable::hashFunction(std::string key)
     return (key.length() - 1) % maxSize; 
 }
 
-bool HashTable::insert(std::string key, int value)
+void HashTable::insert(std::string key, int value)
 {
     int i = hashFunction(key);
 
     // Fail if map is full
     if(currentSize == maxSize){
-        return false;
+        throw "Map is full";
     }
 
     // Fail if key is empty string
     if(key == ""){
-        return false; 
+        throw "Empty key not allowed";
     }
     
     // Check for collisions
@@ -70,7 +70,7 @@ bool HashTable::insert(std::string key, int value)
         // Fail if duplicate key
         if(array[i].key == key) {
             array[i].value = value;
-            return true;
+            return;
         }
 
         i = i + 1 % maxSize;
@@ -79,8 +79,6 @@ bool HashTable::insert(std::string key, int value)
     array[i] = Pair();
     array[i].key = key;
     array[i].value = value;
-
-    return true;
 }
 
 // bool HashTable::remove(std::string key)
@@ -128,14 +126,19 @@ int main()
 
     map.insert("c", 4); // c -> 3
     map.insert("c", 5);
-
-    std::cout << map.search("a") << std::endl; 
-    std::cout << map.search("abc") << std::endl; 
     try {
-        std::cout << map.search("z") << std::endl; 
-    } catch (const char* error) {
-        std::cout << error << std::endl;
+        map.insert("", 10); 
+    } catch(const char *error) {
+        std::cerr << error << std::endl;
     }
+
+    // std::cout << map.search("a") << std::endl; 
+    // std::cout << map.search("abc") << std::endl; 
+    // try {
+    //     std::cout << map.search("z") << std::endl; 
+    // } catch (const char* error) {
+    //     std::cout << error << std::endl;
+    // }
 
     return 0;
 }

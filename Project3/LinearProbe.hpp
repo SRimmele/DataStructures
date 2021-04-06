@@ -18,7 +18,7 @@ class HashTable {
     HashTable(int size);    //constructor
     ~HashTable();   //Destructor
     int hashFunction(std::string key); 
-    bool insert(std::string key, int value);
+    void insert(std::string key, int value);
     bool remove(std::string key); 
     int search(std::string key);
 };
