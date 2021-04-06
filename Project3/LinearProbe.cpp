@@ -81,10 +81,44 @@ void HashTable::insert(std::string key, int value)
     array[i].value = value;
 }
 
-// bool HashTable::remove(std::string key)
-// {
+void HashTable::remove(std::string key)
+{
+    int i = hashFunction(key); 
 
-// }
+    // Make sure key is in map
+    search(key);
+
+    // Mark pair with key as empty
+    for(int num_iters = 0; num_iters < maxSize && array[i].key.length() != 0; ++num_iters) {
+        if(array[i].key == key) {
+            array[i].key = "";
+            break;
+        }
+
+        i = i + 1 % maxSize;
+    }
+
+    int lastI = i;
+    i = i + 1 % maxSize;
+    for(int num_iters = 0; num_iters < maxSize; ++num_iters) {
+        if(array[i].key.length() == 0) {
+            break;
+        }
+
+        auto hashResult = hashFunction(array[i].key);
+        if(hashFunction(array[i].key) == hashFunction(key)) {
+            array[lastI].key = array[i].key;
+            array[lastI].value = array[i].value;
+
+            array[i].key = "";
+
+            lastI = i;
+            num_iters = 0;
+        }
+    
+        i = i + 1 % maxSize;
+    }
+}
 
 int HashTable::search(std::string key)
 {
@@ -126,11 +160,14 @@ int main()
 
     map.insert("c", 4); // c -> 3
     map.insert("c", 5);
-    try {
-        map.insert("", 10); 
-    } catch(const char *error) {
-        std::cerr << error << std::endl;
-    }
+    map.insert("d", 6);
+
+    map.remove("a"); 
+    // try {
+    //     map.insert("", 10); 
+    // } catch(const char *error) {
+    //     std::cerr << error << std::endl;
+    // }
 
     // std::cout << map.search("a") << std::endl; 
     // std::cout << map.search("abc") << std::endl; 
