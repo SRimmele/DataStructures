@@ -91,7 +91,7 @@ int HashTable::search(std::string key)
     int i = hashFunction(key); 
 
     // Search for key if collision
-    while(array[i].key.length() != 0) {
+    for(int num_iters = 0; num_iters < maxSize && array[i].key.length() != 0; ++num_iters) {
         if(array[i].key == key) {
             return array[i].value;
         }
