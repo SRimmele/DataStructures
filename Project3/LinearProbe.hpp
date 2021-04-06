@@ -12,15 +12,17 @@ class HashTable {
     private: 
     int maxSize; 
     int currentSize; 
-    int* array; 
+    Pair* array; 
 
     public: 
     HashTable(int size);    //constructor
     ~HashTable();   //Destructor
     int hashFunction(std::string key); 
-    void insert(std::string key, int value);
-    void remove(std::string key); 
+    bool insert(std::string key, int value);
+    bool remove(std::string key); 
     int search(std::string key);
 };
+
+//HashTable generateHash(); 
 
 #endif

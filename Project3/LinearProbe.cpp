@@ -38,7 +38,7 @@ HashTable::HashTable(int maxSize_)
 {
     currentSize = 0; 
     maxSize = maxSize_; 
-    array = new int[maxSize]; 
+    array = new Pair[maxSize]; 
 }
 
 HashTable::~HashTable()
@@ -48,10 +48,41 @@ HashTable::~HashTable()
 
 int HashTable::hashFunction(std::string key)
 {
-    key.length() % maxSize; 
+    return (key.length() - 1) % maxSize; 
 }
 
-//  generate(int size, int maxSize_)
+bool HashTable::insert(std::string key, int value)
+{
+    int i = hashFunction(key);
+
+    // Fail if map is full
+    if(currentSize == maxSize){
+        return false;
+    }
+
+    // Fail if key is empty string
+    if(key == ""){
+        return false; 
+    }
+    
+    // Check for collisions
+    while(array[i].key.length() != 0) {
+        // Fail if duplicate key
+        if(array[i].key == key) {
+            return false;
+        }
+
+        i = i + 1 % maxSize;
+    }
+
+    array[i] = Pair();
+    array[i].key = key;
+    array[i].value = value;
+
+    return true;
+}
+
+//  generateHash(int size, int maxSize_)
 // {
 //     std::vector<int> values;
 //     for (int i = 0; i < size; ++i)
@@ -67,6 +98,19 @@ int HashTable::hashFunction(std::string key)
 // }
 
 int main()
+{
+    HashTable map(16);
+    map.insert("a", 1);  // a -> 0
+    map.insert("ab", 2); // ab -> 1
+    map.insert("abc", 3); // abc -> 2
+
+    map.insert("c", 4); // c -> 3
+    map.insert("c", 5);
+
+    return 0;
+}
+
+int driver_main()
 {
     timer time;
 
