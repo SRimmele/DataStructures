@@ -82,6 +82,27 @@ bool HashTable::insert(std::string key, int value)
     return true;
 }
 
+// bool HashTable::remove(std::string key)
+// {
+
+// }
+
+int HashTable::search(std::string key)
+{
+    int i = hashFunction(key); 
+
+    // Search for key if collision
+    while(array[i].key.length() != 0) {
+        if(array[i].key == key) {
+            return array[i].value;
+        }
+
+        i = i + 1 % maxSize;
+    }
+
+    throw "Key not in map";
+}
+
 //  generateHash(int size, int maxSize_)
 // {
 //     std::vector<int> values;
@@ -106,6 +127,14 @@ int main()
 
     map.insert("c", 4); // c -> 3
     map.insert("c", 5);
+
+    std::cout << map.search("a") << std::endl; 
+    std::cout << map.search("abc") << std::endl; 
+    try {
+        std::cout << map.search("z") << std::endl; 
+    } catch (const char* error) {
+        std::cout << error << std::endl;
+    }
 
     return 0;
 }
