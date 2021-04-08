@@ -138,10 +138,19 @@ int HashTable::search(std::string key)
 
 HashTable generateHashMap(int size, int maxSize) {
     HashTable map(maxSize);
+    char randLetters; 
+    int randNums; 
 
+    srand(time(NULL)); 
     for(int i = 0; i < size; ++i) {
-        map.insert(std::to_string(i), i);
+        randNums = rand() % 26; 
+        randLetters = 'a' + randNums;
+        std::string keys{randLetters};  
+        //map.insert(std::to_string(i), i);
+        map.insert(keys, randNums); 
     }
+
+    return map; 
 }
 //  generateHash(int size, int maxSize_)
 // {
@@ -160,7 +169,9 @@ HashTable generateHashMap(int size, int maxSize) {
 
 int main()
 {
-    HashTable map(16);
+    //HashTable map(16);
+    auto map = generateHashMap(4, 32); 
+    //std::cout << map << std::endl; 
     map.insert("a", 1);  // a -> 0
     map.insert("ab", 2); // ab -> 1
     map.insert("abc", 3); // abc -> 2
@@ -169,7 +180,7 @@ int main()
     map.insert("c", 5);
     map.insert("d", 6);
 
-    map.remove("a"); 
+    //map.remove("a"); 
     // try {
     //     map.insert("", 10); 
     // } catch(const char *error) {
@@ -223,11 +234,16 @@ int driver_main()
             // computer is too fast
             for (int j = 0; j < factor; ++j)
             {
-                 //auto s = generateMyHeap(size);
+                auto s = generateHashMap(size, 32);
 
-                // time.restart();
-                // s.push(0);
-                // time.stop();
+                time.restart();
+                try{
+                    s.insert("sav", 9);
+                }
+                catch(const char* error){
+
+                }
+                time.stop();
 
                 totalPushTime += time.time();
             }
@@ -241,11 +257,11 @@ int driver_main()
             // computer is too fast
             for (int j = 0; j < factor; ++j)
             {
-                // auto s = generateMyStack(size);
+                auto s = generateHashMap(size, 32);
 
-                // time.restart();
-                // s.pop();
-                // time.stop();
+                time.restart();
+                s.remove("sav");
+                time.stop();
 
                 totalPopTime += time.time();
             }
@@ -259,11 +275,16 @@ int driver_main()
             // computer is too fast
             for (int j = 0; j < factor; ++j)
             {
-                // auto s = generateMyStack(size);
+                auto s = generateHashMap(size, 32);
 
-                // time.restart();
-                // s.search(0);
-                // time.stop();
+                time.restart();
+                try{
+                    s.search(0);
+                }
+                catch(const char* error){
+
+                }
+                time.stop();
 
                 totalSearchTime += time.time();
             }
