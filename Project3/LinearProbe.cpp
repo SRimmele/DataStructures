@@ -29,7 +29,7 @@ const int operations = 3;
 
 const char* headings[operations] = 
 {
-    "| Insert           ", 
+    "| Insert         ", 
     "| Delete           ", 
     "| Search    "
 };
@@ -73,17 +73,17 @@ void HashTable::insert(std::string key, int value)
             return;
         }
 
-        i = i + 1 % maxSize;
+        i = (i + 1) % maxSize;
     }
 
-    array[i] = Pair();
     array[i].key = key;
     array[i].value = value;
 }
 
 void HashTable::remove(std::string key)
 {
-    int i = hashFunction(key); 
+    int i = hashFunction(key);
+    const auto hashedKey = hashFunction(key); 
 
     // Make sure key is in map
     search(key);
@@ -94,19 +94,23 @@ void HashTable::remove(std::string key)
             array[i].key = "";
             break;
         }
-
-        i = i + 1 % maxSize;
     }
 
     int lastI = i;
-    i = i + 1 % maxSize;
+    i = (i + 1) % maxSize;
     for(int num_iters = 0; num_iters < maxSize; ++num_iters) {
         if(array[i].key.length() == 0) {
             break;
         }
 
+        // Break after all keys that hash to removed key's hash have been moved.
+        // Prevent infinite loop
+        if(hashFunction(key) == i){
+            break; 
+        }
+
         auto hashResult = hashFunction(array[i].key);
-        if(hashFunction(array[i].key) == hashFunction(key)) {
+        if(hashFunction(array[i].key) == hashedKey) {
             array[lastI].key = array[i].key;
             array[lastI].value = array[i].value;
 
@@ -116,7 +120,7 @@ void HashTable::remove(std::string key)
             num_iters = 0;
         }
     
-        i = i + 1 % maxSize;
+        i = (i + 1) % maxSize;
     }
 }
 
@@ -130,75 +134,47 @@ int HashTable::search(std::string key)
             return array[i].value;
         }
 
-        i = i + 1 % maxSize;
+        i = (i + 1) % maxSize;
     }
 
     throw "Key not in map";
 }
 
+void HashTable::print() {
+    for(int i = 0; i < maxSize; ++i){
+        std::cout << std::right << std::setw(3) << i << " | ";
+        if(array[i].key != ""){
+            std::cout << '"' << array[i].key << '"' << ": "
+                       << array[i].value; 
+        }
+        std::cout << std::endl;
+    }
+    
+}
+
 HashTable generateHashMap(int size, int maxSize) {
     HashTable map(maxSize);
-    char randLetters; 
-    int randNums; 
 
     srand(time(NULL)); 
-    for(int i = 0; i < size; ++i) {
-        randNums = rand() % 26; 
-        randLetters = 'a' + randNums;
-        std::string keys{randLetters};  
-        //map.insert(std::to_string(i), i);
-        map.insert(keys, randNums); 
-    }
 
+    // Run every time for each key
+    for(int i = 0; i < size; ++i) {
+        int randNum = rand() % 32; 
+
+        // Run every time for each character in key
+        std::string key = "";
+        for(int j = 0; j < randNum + 1; ++j) { 
+            char randLetter = 'a' + rand() % 26;
+            key += randLetter; 
+        }
+        
+        map.insert(key, randNum);
+    }
+    
     return map; 
 }
-//  generateHash(int size, int maxSize_)
-// {
-//     std::vector<int> values;
-//     for (int i = 0; i < size; ++i)
-//     {
-//         values.push_back(i);
-//     }
-
-//     std::random_shuffle(values.begin(), values.end());
-//     int *array = new int [maxSize_];
-//     std::copy(values.begin(), values.end(), array);  
-    
-//     return MaxHeap(array, values.size(), maxSize_);
-// }
 
 int main()
-{
-    //HashTable map(16);
-    auto map = generateHashMap(4, 32); 
-    //std::cout << map << std::endl; 
-    map.insert("a", 1);  // a -> 0
-    map.insert("ab", 2); // ab -> 1
-    map.insert("abc", 3); // abc -> 2
-
-    map.insert("c", 4); // c -> 3
-    map.insert("c", 5);
-    map.insert("d", 6);
-
-    //map.remove("a"); 
-    // try {
-    //     map.insert("", 10); 
-    // } catch(const char *error) {
-    //     std::cerr << error << std::endl;
-    // }
-
-    // std::cout << map.search("a") << std::endl; 
-    // std::cout << map.search("abc") << std::endl; 
-    // try {
-    //     std::cout << map.search("z") << std::endl; 
-    // } catch (const char* error) {
-    //     std::cout << error << std::endl;
-    // }
-
-    return 0;
-}
-
-int driver_main()
 {
     timer time;
 
@@ -207,9 +183,9 @@ int driver_main()
 
     // How many times to repeat the operation per task
     // (adding constant to our big-oh runtime)
-    const int factor = 10000;
+    const int factor = 5000;
 
-    std::cout << "My Max Binary Heap: \n"; 
+    std::cout << "My Linear Probing Hash Table: \n"; 
     std::cout << "____";
     for (int i = 0; i < operations; ++i)
       std::cout << headings[i];
@@ -220,10 +196,10 @@ int driver_main()
       std::cout << "|      Time      ";
     std::cout << std::endl;
 
-    // Insert into stack size 1
+    // Insert into hash table of size 1
     for(int size = 1; size < 1000; size *= 2){
-        double totalPushTime = 0;
-        double totalPopTime = 0;
+        double totalInsertTime = 0;
+        double totalRemoveTime = 0;
         double totalSearchTime = 0;
 
         // Run multiple repetitions because the execution time
@@ -234,72 +210,54 @@ int driver_main()
             // computer is too fast
             for (int j = 0; j < factor; ++j)
             {
-                auto s = generateHashMap(size, 32);
+                try {
+                    auto s = generateHashMap(size, size + 1); 
 
-                time.restart();
-                try{
-                    s.insert("sav", 9);
+                    time.restart();
+                    try {
+                        s.insert("sav", 9);
+                    } catch(const char* error) {
+                        std::cerr << "Error inserting key 'sav': " << error << std::endl;
+                        return 1;
+                    }
+                    time.stop();
+                    totalInsertTime += time.time();
+                    time.restart();
+                    try {
+                        s.search("sav");
+                    } catch(const char* error) {
+                        std::cerr << "Error searching key 'sav': " << error << std::endl;
+                        return 1;
+                    }
+                    time.stop();
+                    totalSearchTime += time.time();
+
+                    time.restart();
+                    try {
+                        s.remove("sav");
+                    } catch(const char* error) {
+                        std::cerr << "Error removing key 'sav': " << error << std::endl;
+                        return 1;
+                    }
+                    time.stop();
+                    totalRemoveTime += time.time();
+                } catch(const char * error) {
+                    std::cerr << "Error generating hash map: " << error << std::endl;
+                    return 1;
                 }
-                catch(const char* error){
-
-                }
-                time.stop();
-
-                totalPushTime += time.time();
-            }
-        }
-
-        // Run multiple repetitions because the execution time
-        // can vary between runs
-        for (int i = 0; i < repetitions; ++i)
-        {
-            // Repeat the same operation multiple times because the
-            // computer is too fast
-            for (int j = 0; j < factor; ++j)
-            {
-                auto s = generateHashMap(size, 32);
-
-                time.restart();
-                s.remove("sav");
-                time.stop();
-
-                totalPopTime += time.time();
-            }
-        }
-
-        // Run multiple repetitions because the execution time
-        // can vary between runs
-        for (int i = 0; i < repetitions; ++i)
-        {
-            // Repeat the same operation multiple times because the
-            // computer is too fast
-            for (int j = 0; j < factor; ++j)
-            {
-                auto s = generateHashMap(size, 32);
-
-                time.restart();
-                try{
-                    s.search(0);
-                }
-                catch(const char* error){
-
-                }
-                time.stop();
-
-                totalSearchTime += time.time();
             }
         }
 
         // Use the average runtime as our output
-        // double averagePushTime = (double)totalPushTime / repetitions;
-        // double averagePopTime = (double)totalPopTime / repetitions;
-        // double averageSearchTime = (double)totalSearchTime / repetitions;
-    //     std::cout << std::fixed
-    //         << std::setw(4) << size << "|" << std::setprecision(10)
-    //         << std::setw(16) << averagePushTime << "|"
-    //         << std::setw(16) << averagePopTime << "|"
-    //         << std::setw(16) << averageSearchTime << "|"
-    //         << std::endl;
+        double averageInsertTime = (double)totalInsertTime / repetitions;
+        double averageRemoveTime = (double)totalRemoveTime / repetitions;
+        double averageSearchTime = (double)totalSearchTime / repetitions;
+        std::cout << std::fixed
+            << std::setw(4) << size << "|" << std::setprecision(10)
+            << std::setw(16) << averageInsertTime << "|"
+            << std::setw(16) << averageRemoveTime << "|"
+            << std::setw(16) << averageSearchTime << "|"
+            << std::endl;
      }
     
 }

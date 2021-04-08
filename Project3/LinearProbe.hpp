@@ -21,8 +21,9 @@ class HashTable {
     void insert(std::string key, int value);
     void remove(std::string key); 
     int search(std::string key);
+    void print();
 };
 
-//HashTable generateHash(); 
+HashTable generateHashMap(int size, int maxSize); 
 
 #endif
