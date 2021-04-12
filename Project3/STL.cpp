@@ -18,7 +18,7 @@ const char* headings[operations] =
     "| Search    "
 };
 
-std::unordered_map<std::string, int> generateHashMap(int size, int maxSize) {
+std::unordered_map<std::string, int> generateSTLHashMap(int size, int maxSize) {
     std::unordered_map<std::string, int> hashMap; 
 
     srand(time(NULL)); 
@@ -77,7 +77,7 @@ int runSTL()
             for (int j = 0; j < factor; ++j)
             {
                 try {
-                    auto s = generateHashMap(size, size + 1); 
+                    auto s = generateSTLHashMap(size, size + 1); 
 
                     time.restart();
                     try {
