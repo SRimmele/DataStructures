@@ -25,6 +25,6 @@ class HashTable {
 };
 
 HashTable generateHashMap(int size, int maxSize); 
-int runLinearProbing(); 
+void runLinearProbing(); 
 
 #endif

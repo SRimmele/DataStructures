@@ -30,7 +30,7 @@ const int operations = 3;
 const char* headings[operations] = 
 {
     "| Insert         ", 
-    "| Delete           ", 
+    "| Delete         ", 
     "| Search    "
 };
 
@@ -174,7 +174,7 @@ HashTable generateHashMap(int size, int maxSize) {
     return map; 
 }
 
-int runLinearProbing()
+void runLinearProbing()
 {
     timer time;
 
@@ -218,7 +218,7 @@ int runLinearProbing()
                         s.insert("sav", 9);
                     } catch(const char* error) {
                         std::cerr << "Error inserting key 'sav': " << error << std::endl;
-                        return 1;
+                        return;
                     }
                     time.stop();
                     totalInsertTime += time.time();
@@ -227,7 +227,7 @@ int runLinearProbing()
                         s.search("sav");
                     } catch(const char* error) {
                         std::cerr << "Error searching key 'sav': " << error << std::endl;
-                        return 1;
+                        return;
                     }
                     time.stop();
                     totalSearchTime += time.time();
@@ -237,13 +237,13 @@ int runLinearProbing()
                         s.remove("sav");
                     } catch(const char* error) {
                         std::cerr << "Error removing key 'sav': " << error << std::endl;
-                        return 1;
+                        return;
                     }
                     time.stop();
                     totalRemoveTime += time.time();
                 } catch(const char * error) {
                     std::cerr << "Error generating hash map: " << error << std::endl;
-                    return 1;
+                    return;
                 }
             }
         }

@@ -11,10 +11,10 @@
 
 const int operations = 3;
 
-const char* headings[operations] = 
+const char* STL_headings[operations] = 
 {
     "| Insert         ", 
-    "| Delete           ", 
+    "| Delete         ", 
     "| Search    "
 };
 
@@ -40,7 +40,7 @@ std::unordered_map<std::string, int> generateSTLHashMap(int size, int maxSize) {
     return hashMap; 
 }
 
-int runSTL()
+void runSTL()
 {
     timer time;
 
@@ -51,10 +51,10 @@ int runSTL()
     // (adding constant to our big-oh runtime)
     const int factor = 5000;
 
-    std::cout << "My Linear Probing Hash Table: \n"; 
+    std::cout << "STL Linear Probing Hash Table: \n"; 
     std::cout << "____";
     for (int i = 0; i < operations; ++i)
-      std::cout << headings[i];
+      std::cout << STL_headings[i];
     std::cout << std::endl;
 
     std::cout << "Size";
@@ -80,36 +80,26 @@ int runSTL()
                     auto s = generateSTLHashMap(size, size + 1); 
 
                     time.restart();
-                    try {
-                        s.insert({"sav", 9});
-                    } catch(const char* error) {
-                        std::cerr << "Error inserting key 'sav': " << error << std::endl;
-                        return 1;
-                    }
+                    s.insert({"sav", 9});
                     time.stop();
+
                     totalInsertTime += time.time();
+
                     time.restart();
-                    try {
-                        s.find("sav");
-                    } catch(const char* error) {
-                        std::cerr << "Error searching key 'sav': " << error << std::endl;
-                        return 1;
-                    }
+                    s.find("sav");
                     time.stop();
+
                     totalSearchTime += time.time();
 
                     time.restart();
-                    try {
-                        s.erase("sav");
-                    } catch(const char* error) {
-                        std::cerr << "Error removing key 'sav': " << error << std::endl;
-                        return 1;
-                    }
+                    s.erase("sav");
                     time.stop();
+
                     totalRemoveTime += time.time();
+
                 } catch(const char * error) {
                     std::cerr << "Error generating hash map: " << error << std::endl;
-                    return 1;
+                    return;
                 }
             }
         }
@@ -124,7 +114,5 @@ int runSTL()
             << std::setw(16) << averageRemoveTime << "|"
             << std::setw(16) << averageSearchTime << "|"
             << std::endl;
-     }
-
-    
+     }  
 }
