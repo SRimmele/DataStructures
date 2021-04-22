@@ -35,6 +35,7 @@ HopscotchHashTable::HopscotchHashTable(int length, int neighborhoodSize){
     initializeTable();
 }
 
+/*
 // Destructor
 HopscotchHashTable::~HopscotchHashTable(){
 
@@ -44,6 +45,7 @@ HopscotchHashTable::~HopscotchHashTable(){
     }
     delete table;
 }
+*/ 
 
 // initialize the table of buckets
 void HopscotchHashTable::initializeTable(){
@@ -102,7 +104,7 @@ void HopscotchHashTable::addValue(int input){
         insert(hashValue, input);
     }
     catch (std::string e){
-        std::cout << e << std::endl;
+        //std::cout << e << std::endl;
     }
 }
 
@@ -117,7 +119,7 @@ void HopscotchHashTable::insert(int hashValue, int input){
     if(table[hashValue].filled){    // If there is an entry in the home location
         int next = findNextAvailable(hashValue);    // Find next open space
         if(next == -1){
-            std::cout << "Table is full" << std::endl;
+            //std::cout << "Table is full" << std::endl;
         }
         // if in neighborhood of home location : Store in found space
         if(inNeighborhood(hashValue, next, diff)){
@@ -134,7 +136,7 @@ void HopscotchHashTable::insert(int hashValue, int input){
             table[next].homeHashValue = hashValue;
         }
         else{
-            std::cout << "Unable to open space for: "<< input << std::endl;
+            //std::cout << "Unable to open space for: "<< input << std::endl;
             /*             throw "ERROR"; */
         }
     }
@@ -310,7 +312,7 @@ void HopscotchHashTable::removeValue(int input){
         deleteEntry(hashValue, location, offset);
     }
     catch (std::string e){
-        std::cout << e << std::endl;
+        //std::cout << e << std::endl;
     }
 }
 
@@ -327,7 +329,7 @@ int HopscotchHashTable::searchValue(int input){
         return search(hashValue, input, offset);
     }
     catch (std::string e){
-        std::cout << e << std::endl;
+        //std::cout << e << std::endl;
         return -1;
     }
 }

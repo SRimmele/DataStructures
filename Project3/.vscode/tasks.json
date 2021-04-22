@@ -9,6 +9,8 @@
                 "LinearProbe.cpp",
                 "STL.cpp", 
                 "main.cpp",
+                "HopDriver.cpp",
+                "HopscotchHashTable.cpp", 
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}-Debug.exe"
             ],

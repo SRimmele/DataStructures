@@ -17,7 +17,7 @@ public:
     // Constructot {length and neighborhoodsize provided}
     HopscotchHashTable(int length, int neighborhoodSize);
 
-    ~HopscotchHashTable();
+    //~HopscotchHashTable();
 
     // add a value to the table
     void addValue(int input);
