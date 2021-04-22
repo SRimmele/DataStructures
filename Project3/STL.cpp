@@ -51,7 +51,7 @@ void runSTL()
     // (adding constant to our big-oh runtime)
     const int factor = 5000;
 
-    std::cout << "STL Linear Probing Hash Table: \n"; 
+    std::cout << "STL Hash Table: \n"; 
     std::cout << "____";
     for (int i = 0; i < operations; ++i)
       std::cout << STL_headings[i];
