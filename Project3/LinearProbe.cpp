@@ -8,10 +8,7 @@
  * Test cases should be completed for:
  * 1. Own Linear Probing
  * 2. Experimenter (1, 10, 19, 28) Hopscotch Hashing
- * 3. Experimenter (1, 10, 19, 28) Hopscotch Hashing OR STL
- * 
- * # Notes
- * - Do not have to use sample code
+ * 3. STL Implemenation
  */
 
 
@@ -34,6 +31,7 @@ const char* headings[operations] =
     "| Search    "
 };
 
+//constructor
 HashTable::HashTable(int maxSize_)
 {
     currentSize = 0; 
@@ -41,17 +39,18 @@ HashTable::HashTable(int maxSize_)
     array = new Pair[maxSize]; 
 }
 
+//destructor
 HashTable::~HashTable()
 {
     delete [] array; 
 }
 
-int HashTable::hashFunction(std::string key)
+int HashTable::hashFunction(std::string key)    //This isn't optimized, so expect worst-case
 {
     return (key.length() - 1) % maxSize; 
 }
 
-void HashTable::insert(std::string key, int value)
+void HashTable::insert(std::string key, int value)  //time & Space complexity = O(n)
 {
     int i = hashFunction(key);
 
@@ -80,7 +79,7 @@ void HashTable::insert(std::string key, int value)
     array[i].value = value;
 }
 
-void HashTable::remove(std::string key)
+void HashTable::remove(std::string key)             //time & Space complexity = O(n)
 {
     int i = hashFunction(key);
     const auto hashedKey = hashFunction(key); 
@@ -124,7 +123,7 @@ void HashTable::remove(std::string key)
     }
 }
 
-int HashTable::search(std::string key)
+int HashTable::search(std::string key)              //time & Space complexity = O(n)
 {
     int i = hashFunction(key); 
 
@@ -140,7 +139,8 @@ int HashTable::search(std::string key)
     throw "Key not in map";
 }
 
-void HashTable::print() {
+void HashTable::print()         //Used for testing
+{
     for(int i = 0; i < maxSize; ++i){
         std::cout << std::right << std::setw(3) << i << " | ";
         if(array[i].key != ""){
@@ -152,7 +152,8 @@ void HashTable::print() {
     
 }
 
-HashTable generateHashMap(int size, int maxSize) {
+HashTable generateHashMap(int size, int maxSize)        //Creates a Random Hash Map of Keys and Values
+{
     HashTable map(maxSize);
 
     srand(time(NULL)); 
