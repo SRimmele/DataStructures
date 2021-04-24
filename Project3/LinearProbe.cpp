@@ -81,14 +81,14 @@ void HashTable::insert(std::string key, int value)  //time & Space complexity = 
 
 void HashTable::remove(std::string key)             //time & Space complexity = O(n)
 {
-    int i = hashFunction(key);
+    int i = hashFunction(key); //O(1)
     const auto hashedKey = hashFunction(key); 
 
     // Make sure key is in map
-    search(key);
+    search(key); //O(n)
 
     // Mark pair with key as empty
-    for(int num_iters = 0; num_iters < maxSize && array[i].key.length() != 0; ++num_iters) {
+    for(int num_iters = 0; num_iters < maxSize && array[i].key.length() != 0; ++num_iters) { //O(1)
         if(array[i].key == key) {
             array[i].key = "";
             break;
@@ -96,8 +96,8 @@ void HashTable::remove(std::string key)             //time & Space complexity = 
     }
 
     int lastI = i;
-    i = (i + 1) % maxSize;
-    for(int num_iters = 0; num_iters < maxSize; ++num_iters) {
+    i = (i + 1) % maxSize;  //O(1) 
+    for(int num_iters = 0; num_iters < maxSize; ++num_iters) { //O(n)
         if(array[i].key.length() == 0) {
             break;
         }
@@ -128,7 +128,7 @@ int HashTable::search(std::string key)              //time & Space complexity = 
     int i = hashFunction(key); 
 
     // Search for key if collision
-    for(int num_iters = 0; num_iters < maxSize && array[i].key.length() != 0; ++num_iters) {
+    for(int num_iters = 0; num_iters < maxSize && array[i].key.length() != 0; ++num_iters) { //O(n)
         if(array[i].key == key) {
             return array[i].value;
         }
@@ -160,9 +160,9 @@ HashTable generateHashMap(int size, int maxSize)        //Creates a Random Hash 
 
     // Run every time for each key
     for(int i = 0; i < size; ++i) {
-        int randNum = rand() % 32; 
+        int randNum = rand() % 32;  //O(1)
 
-        // Run every time for each character in key
+        // Run every time for each character in key --> O(n)
         std::string key = "";
         for(int j = 0; j < randNum + 1; ++j) { 
             char randLetter = 'a' + rand() % 26;
